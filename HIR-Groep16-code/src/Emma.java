@@ -8,11 +8,5 @@
  *
  * @author eawillae
  */
-import java.sql.*;
-public class DemoClass {
-    public static void main (String [] args) throws DBException 
-    {
- 
-        
-    }
+public class Emma {   
 }
