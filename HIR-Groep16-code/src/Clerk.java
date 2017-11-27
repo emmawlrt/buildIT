@@ -18,8 +18,10 @@ public class Clerk extends Employee {
     public Clerk(String employeeID, String emailAddress, String phoneNumber) {
         super(employeeID, emailAddress, phoneNumber);
     }
+    //Work in progress.
     public boolean CheckEquipmentAvailability(Offer anOffer) throws DBException{
         String equipCode = anOffer.getCode();
+        boolean available = false;
         Connection con = null;
         try
             {
@@ -38,16 +40,18 @@ public class Clerk extends Employee {
                     siteAddress = ers.getString("siteAddress");
                 } else { //we verwachten geen volgende rij
                     DBConnector.closeConnection(con);
-                    return null;
                 }
-                Equipment equipment = new Equipment(code, description, type, siteAddress);
                 
                 DBConnector.closeConnection(con);
-                return equipment;
+                return available;
         }
         catch (Exception e) {
             e.printStackTrace();
             DBConnector.closeConnection(con);
             throw new DBException(e);
         }
+    }
+    public Offer selectMostCostEff(String equipmentType){
+
+   }
 }

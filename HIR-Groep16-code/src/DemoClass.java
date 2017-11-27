@@ -15,6 +15,6 @@ public class DemoClass {
     {
         System.out.println("What type of equipment do you want?");
         Scanner keyboard = new Scanner(System.in);
-        Clerk.CheckTypeAvailability(keyboard.nextLine());
+        //siteEngineerObject.CheckTypeAvailability(keyboard.nextLine());
     }
 }
