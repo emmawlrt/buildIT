@@ -13,13 +13,13 @@ public class Equipment {
     private String code;
     private String description;
     private String type;
-    private String address;
+    private String siteAddress;
 
-    public Equipment(String code, String description, String type, String address) {
+    public Equipment(String code, String description, String type, String siteAddress) {
         this.code = code;
         this.description = description;
         this.type = type;
-        this.address = address;
+        this.siteAddress = siteAddress;
     }
 
     public String getCode() {

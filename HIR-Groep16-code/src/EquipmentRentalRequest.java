@@ -20,7 +20,7 @@ public class EquipmentRentalRequest {
     private String reasonForCancellationOrRefusal;
     private String equipmentRequirements;
     private PurchaseOrder purchaseOrder;
-
+    
     public EquipmentRentalRequest(int requestNumber, Date requestDate, 
             Date rentalPeriodStart, Date rentalPeriodEnd, String rentalStatus, 
             String reasonForCancellationOrRefusal, String equipmentRequirements) 

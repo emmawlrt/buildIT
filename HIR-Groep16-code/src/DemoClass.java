@@ -8,11 +8,13 @@
  *
  * @author eawillae
  */
-import java.sql.*;
+import java.util.Scanner;
+
 public class DemoClass {
     public static void main (String [] args) throws DBException 
     {
- 
-        
+        System.out.println("What type of equipment do you want?");
+        Scanner keyboard = new Scanner(System.in);
+        Clerk.CheckTypeAvailability(keyboard.nextLine());
     }
 }
