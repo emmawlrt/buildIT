@@ -1,6 +1,7 @@
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -42,17 +43,17 @@ public class SiteEngineer extends Employee {
                         + "FROM Offer"
                         + "WHERE code= " + anEquipmentCode;
                     ResultSet srs = stmt.executeQuery(cmd);
-                    if (!srs.next()) { //min 1 waarde gevonden die aan deze vereisten voldoet
-                        
+                    if (!srs.next()) { //in 'Offer' zitten enkel de relaties met een supplier
+                        //we hebben geen equipment in eigen stock, we moeten een RRequest verzenden
                         available = true;
-                    } else { //dit equipment is in eigen stock en we moeten dus geen RentalRequest verzenden//we hebben geen equipment in eigen stock, we moeten een RRequest verzenden
-                        DBConnector.closeConnection(con);
+                    } else { //min 1 waarde gevonden die aan deze vereisten voldoet
+                    //dit equipment is in eigen stock en we moeten dus geen RentalRequest verzenden
                     }
                 }
                 DBConnector.closeConnection(con);
                 return available;
             }
-        catch (Exception e) {
+        catch (DBException | SQLException e) {
             e.printStackTrace();
             DBConnector.closeConnection(con);
             throw new DBException(e);
