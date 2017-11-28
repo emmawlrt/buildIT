@@ -9,6 +9,7 @@
  * @author eawillae
  */
 public class Offer {
+    
 private String code; //van het specifieke equipment
 private String supplierName;
 private double dailyRentalPrice;
