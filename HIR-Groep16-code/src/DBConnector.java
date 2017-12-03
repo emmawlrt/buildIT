@@ -12,13 +12,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Deze klasse heb ik aangemaakt omdat het openen en sluiten van een connectie
- * niet enkel voor de DBStudent klasse zou zijn, maar voor alle klasse in de
- * persistence layer.
- *
- * @author stevmert
- */
 public class DBConnector {
 
     private static final String DB_NAME = "BINFG16";//vul hier uw databank naam in

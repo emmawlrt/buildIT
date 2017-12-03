@@ -30,12 +30,28 @@ public class Equipment {
         return description;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public String getSiteAddress() {
+        return siteAddress;
+    }
+
     public void setCode(String code) {
         this.code = code;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setSiteAddress(String siteAddress) {
+        this.siteAddress = siteAddress;
     }
     
 }

@@ -15,20 +15,33 @@ public class EquipmentRentalRequest {
     private String reasonForCancellationOrRefusal;
     private String equipmentRequirements;
     private PurchaseOrder purchaseOrder;
-    private String siteEngineerID;
-    private String clerkID;
-    private String worksEngineerID;
+    private int siteEngineerID; //We veranderen dit in een int, ipv van origineel String
+    private int clerkID;
+    private int worksEngineerID;
+    
+    //1ste Status
+    public EquipmentRentalRequest(int requestNumber, String rentalStatus, Date requestDate, 
+            String equipmentRequirements, String Address, int siteEngineerID)
+    {
+        this.requestNumber = requestNumber;
+        this.requestDate = requestDate;
+        this.rentalStatus = rentalStatus;
+        this.equipmentRequirements = equipmentRequirements;
+        this.purchaseOrder = new PurchaseOrder();
+        //Hier zijn Flore en Alex nog aan bezig 
+    }
+    
     
     public EquipmentRentalRequest(int requestNumber, Date requestDate, 
             Date rentalPeriodStart, Date rentalPeriodEnd, String rentalStatus, 
-            String reasonForCancellationOrRefusal, String equipmentRequirements) 
+            String equipmentRequirements) 
     {
         this.requestNumber = requestNumber;
         this.requestDate = requestDate;
         this.rentalPeriodStart = rentalPeriodStart;
         this.rentalPeriodEnd = rentalPeriodEnd;
         this.rentalStatus = rentalStatus;
-        this.reasonForCancellationOrRefusal = reasonForCancellationOrRefusal;
+        this.reasonForCancellationOrRefusal = null;
         this.equipmentRequirements = equipmentRequirements;
         this.purchaseOrder = new PurchaseOrder();
     }
@@ -61,6 +74,22 @@ public class EquipmentRentalRequest {
         return equipmentRequirements;
     }
 
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public int getSiteEngineerID() {
+        return siteEngineerID;
+    }
+
+    public int getClerkID() {
+        return clerkID;
+    }
+
+    public int getWorksEngineerID() {
+        return worksEngineerID;
+    }
+
     public void setRequestNumber(int requestNumber) {
         this.requestNumber = requestNumber;
     }
@@ -88,6 +117,22 @@ public class EquipmentRentalRequest {
 
     public void setEquipmentRequirements(String equipmentRequirements) {
         this.equipmentRequirements = equipmentRequirements;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public void setSiteEngineerID(int siteEngineerID) {
+        this.siteEngineerID = siteEngineerID;
+    }
+
+    public void setClerkID(int clerkID) {
+        this.clerkID = clerkID;
+    }
+
+    public void setWorksEngineerID(int worksEngineerID) {
+        this.worksEngineerID = worksEngineerID;
     }
     
     public double getTotalRentalPeriod ()

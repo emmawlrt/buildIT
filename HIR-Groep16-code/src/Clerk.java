@@ -20,69 +20,41 @@ public class Clerk extends Employee {
     public Clerk(String employeeID, String emailAddress, String phoneNumber) {
         super(employeeID, emailAddress, phoneNumber);
     }
-    public Offer selectMostCostEff(String equipmentType) throws DBException{ 
-    // type offer omdat je 1 code van equipment, prijs... moet bekomen die het meeste geschikt is
-    /*CREATE TABLE Equipment (
-    code varchar (50) NOT NULL,
-    description varchar (50) NOT NULL,
-    type varchar (50) NOT NULL,
-    siteAddress varchar (50),
-    PRIMARY KEY (code)
-    );*/
+        public Offer selectMostCostEff(String code) throws DBException{ 
+    
     Connection con = null;
     try {
         con = DBConnector.getConnection();
         Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-        String sql = "SELECT code "
-        + "FROM equipment "
-        + "WHERE type= " + equipmentType;
-
-        //nu zou ik de codes willen gebruiken om in een andere database
-        //de prijzen die bij deze codes horen eruit te halen
-        ResultSet srs = stmt.executeQuery(sql);
-        ArrayList<String> codes = new ArrayList<>();
-        while(srs.next()){ //codes die overeenkomen met de equipment type in een arraylist zetten zodat je deze verder kan gebruiken
-            codes.add(srs.getString("code"));
-            //nu moeten we nog de prijzen van de overeenkomstige code vinden
-        }
-        /*CREATE TABLE Offer(
-        code varchar(30) NOT NULL,
-        supplierName varchar(40) NOT NULL,
-        dailyRentalPrice double NOT NULL,
-        supplierCode varchar(30) NOT NULL,
-        PRIMARY KEY(code,name))*/
-        String sql2 = null;
-        for(int i = 0; i < codes.size(); i++){ 
-            // in offer staat er 30 en in equipment 50?? vanwaar komen deze getallen??
-            sql2 = "SELECT dailyRentalPrice "
+        
+        String sql2 = "SELECT dailyRentalPrice "
             + "FROM offer "
-            + "WHERE code= " + codes.get(i);
-        }
+            + "WHERE code= " + code;
+        
         ResultSet srs2 = stmt.executeQuery(sql2);
-        //HashMap<Double,String> linken = new HashMap();
         ArrayList<Double> dailyRentalPrices = new ArrayList();
         while(srs2.next()){ 
             //codes die overeenkomen met de equipment type in een arraylist zetten zodat je deze verder kan gebruiken
             dailyRentalPrices.add(srs2.getDouble("dailyRentalPrice"));
         }
         double lowestPrice = dailyRentalPrices.get(0);
-        String codeLowestPrice = null;
         //de minimale prijs zoeken
         for(int i = 0 ; i < dailyRentalPrices.size(); i++){
             if(lowestPrice > dailyRentalPrices.get(i+1)){
                 lowestPrice = dailyRentalPrices.get(i+1);
-                codeLowestPrice = codes.get(i+1);
             }
         }
         String sql3 = "SELECT supplierName, supplierCode "
         + "FROM offer "
-        + "WHERE code= " + codeLowestPrice; 
-        // code is niet primary key => combinatie van 2 => klopt het dan hoe ik het doe?
+        + "WHERE code= " + code + "AND dailyRentalPrice= " + lowestPrice; 
+        // code en dailyrentalprice zijn niet primary key => het kan zijn dat er meedere codes zijn met dezelfde laagste prijs
+        // => je selecteert dan de eerste laagste prijs en de eerste supplier die hoort bij de code en die laagste prijs
+        // we gaan ervanuit dat kwaliteiten hetzelfde zijn!
         ResultSet srs3 = stmt.executeQuery(sql3);
         String supplierName;
         String supplierCode;
-        if (srs.next()) {
+        if (srs3.next()) {
         supplierName = srs3.getString("supplierName");
         supplierCode = srs3.getString("supplierCode");
         }
@@ -91,7 +63,7 @@ public class Clerk extends Employee {
         return null;
         }
         DBConnector.closeConnection(con);
-        Offer offer = new Offer(codeLowestPrice,supplierName,lowestPrice, supplierCode);
+        Offer offer = new Offer(code,supplierName,lowestPrice, supplierCode);
         return offer;
 
 
@@ -105,6 +77,38 @@ public class Clerk extends Employee {
     throw new DBException(ex);
    }
    }
+
+   //VRAAG: hoe komen we aan de code van het equipment? iemand moet dit op voorhand al selecteren
+    public boolean suitableEquipment(String code) throws DBException{
+        //aan de hand van de code checken of er minimum 1 supplier is die dat specifieke equipment verhuurt
+        boolean suitable = false;
+        Connection con = null;
+    try {
+        con = DBConnector.getConnection();
+        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            String sql = "SELECT supplierName "
+                    + "FROM Offer "
+                    + "WHERE code= " + code;
+        ResultSet srs = stmt.executeQuery(sql);
+        
+        if(srs.next()){// er is minstens 1 supplier
+            suitable = true;   
+        }
+        else{
+            DBConnector.closeConnection(con);
+            
+        }
+        DBConnector.closeConnection(con);
+            
+    }   catch (SQLException ex) {
+            ex.printStackTrace();
+            DBConnector.closeConnection(con);
+            throw new DBException(ex);
+        }
+    
+        return suitable;
+    }
     
     public boolean CheckEquipmentAvailability(Offer selectedOffer) throws DBException{
         String equipCode = selectedOffer.getCode();
@@ -134,4 +138,5 @@ public class Clerk extends Employee {
             throw new DBException(e);
         }
     }
+
 }
