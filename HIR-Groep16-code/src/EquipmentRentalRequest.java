@@ -1,3 +1,7 @@
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Period;
 import java.util.Date;
 
@@ -82,6 +86,32 @@ public class EquipmentRentalRequest {
         return siteEngineerID;
     }
 
+    public String getSiteAddress() throws DBException {
+        Connection con = null;
+        try
+            {
+                con = DBConnector.getConnection();
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                String sql = "SELECT siteAddress"
+                        + "FROM SiteEngineer"
+                        + "WHERE employeeID= " + siteEngineerID;
+                ResultSet ers = stmt.executeQuery(sql);
+                String address;
+                if (ers.next()){
+                    address = ers.getString("siteAddress");
+                } else { //we verwachten geen volgende rij
+                    DBConnector.closeConnection(con);
+                    return null;
+                }
+                DBConnector.closeConnection(con);
+                return address;
+        }
+        catch (DBException | SQLException e) {
+            e.printStackTrace();
+            DBConnector.closeConnection(con);
+            throw new DBException(e);
+        }
+    }
     public int getClerkID() {
         return clerkID;
     }

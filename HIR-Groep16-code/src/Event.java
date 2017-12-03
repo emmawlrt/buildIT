@@ -23,7 +23,8 @@ public class Event {
     private int rental; 
 //Identificatie van de case, d.w.z. procesuitvoering � hiervoor wordt het requestNumber gebruikt, 
 //0 indien niet verbonden met rentalRequest
-    private String initiator;
+    private int initiator;
+//
     private String outcome;
     //timestamp variabele:
     private Date date = new Date(); 
@@ -55,11 +56,11 @@ public class Event {
         this.rental = rental;
     }
 
-    public String getInitiator() {
+    public int getInitiator() {
         return initiator;
     }
 
-    public void setInitiator(String initiator) {
+    public void setInitiator(int initiator) {
         this.initiator = initiator;
     }
 
@@ -89,7 +90,7 @@ public class Event {
     
     
 
-    public Event(String activityType, int rental, String initiator, String outcome) {
+    public Event(String activityType, int rental, int initiator, String outcome) {
         this.activityType = activityType;
         this.rental = rental;
         this.initiator = initiator;
@@ -99,12 +100,12 @@ public class Event {
     public Event() {
         this.activityType = null;
         this.rental = 0;
-        this.initiator = null;
+        this.initiator = 0;
         this.outcome = null;
     }
      
-    public static void addEventToLog(Event eventToBeAdded){
-    log.add(eventToBeAdded);
+    public void addEventToLog(){
+    log.add(this);
     System.out.println("Event added to log.");
     }
     public static void printEventLog(){
@@ -112,21 +113,22 @@ public class Event {
     for (int i=0;i<log.size();i++){
     Event thisEvent = log.get(i);
     System.out.print(thisEvent.getTime()+"  ");
-    System.out.println("activiteit: " + thisEvent.getActivityType()+ "  initiator: "+ thisEvent.getInitiator()+ "  rental: "+thisEvent.getRental()+"  outcome: "+thisEvent.getOutcome());
+    System.out.println("activiteit: " + thisEvent.getActivityType()+ "  initiator: "+ 
+            thisEvent.getInitiator()+ "  rental: "+thisEvent.getRental()+"  outcome: "+thisEvent.getOutcome());
     }
     }
     
     //methode voor het opslaan van een Event in de database
-    public static void saveEvent(Event e){
+    public void saveEvent(){
     try{
-            Event.saveToDB(e);
+            this.saveToDB();
             System.out.println("Event added to database.");
         }
         catch (Exception ex){
             System.out.println("Probleem bij connecteren met database bij het toevoegen van het Event.");
         }
     }
-    private static void saveToDB(Event e) throws DBException {
+    private void saveToDB() throws DBException {
 		Connection con = null;
 		try {
 			
@@ -137,8 +139,8 @@ public class Event {
 			String sql = "SELECT time "
 					+ "FROM Event "
 					+ "WHERE (activityType, time) = "
-					+ "( '" + e.getActivityType()+ "', "
-                                        +"'" + e.getTime() +"')"+ ";";
+					+ "( '" + this.getActivityType()+ "', "
+                                        +"'" + this.getTime() +"')"+ ";";
                        	 
 			ResultSet srs = stmt.executeQuery(sql);
                        
@@ -146,11 +148,11 @@ public class Event {
 				// UPDATE (wanneer je een Event vindt met dezelfde PK
 			
                                 sql = "UPDATE Event "
-						+ "SET activityType = '" + e.getActivityType()+ "'"
-						+ ", rental = " + e.getRental()
-						+ ", initiator = '" + e.getInitiator()
-						+ "'" + ", outcome = " + e.getOutcome()
-						+ ", time = " + e.getTime()+ "'";
+						+ "SET activityType = '" + this.getActivityType()+ "'"
+						+ ", rental = " + this.getRental()
+						+ ", initiator = '" + this.getInitiator()
+						+ "'" + ", outcome = " + this.getOutcome()
+						+ ", time = " + this.getTime()+ "'";
                            
 				stmt.executeUpdate(sql);
                           
@@ -158,11 +160,11 @@ public class Event {
 				// INSERT
 				sql = "INSERT into Event "
 						+ "(activityType, rental, initiator, outcome, time) "
-						+ "VALUES (" + " '"+e.getActivityType()+"'"
-                                                +", " + e.getRental() 
-                                                + ", '" + e.getInitiator()+ "'"
-						+ ", '" + e.getOutcome()+"'"
-						+ ", '" + e.getTime()+ "');";
+						+ "VALUES (" + " '"+this.getActivityType()+"'"
+                                                +", " + this.getRental() 
+                                                + ", '" + this.getInitiator()+ "'"
+						+ ", '" + this.getOutcome()+"'"
+						+ ", '" + this.getTime()+ "');";
                             
 				stmt.executeUpdate(sql);
 			}

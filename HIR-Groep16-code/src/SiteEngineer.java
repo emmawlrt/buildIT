@@ -17,9 +17,21 @@ import java.util.ArrayList;
  */
 public class SiteEngineer extends Employee {
     
-    public SiteEngineer(String employeeID, String emailAddress, String phoneNumber) {
+    private String siteAddress;
+    
+    public SiteEngineer(String employeeID, String emailAddress, String phoneNumber, String siteAddress) {
         super(employeeID, emailAddress, phoneNumber);
+        this.siteAddress = siteAddress;
     }
+
+    public String getSiteAddress() {
+        return siteAddress;
+    }
+
+    public void setSiteAddress(String siteAddress) {
+        this.siteAddress = siteAddress;
+    }
+    
     public boolean CheckTypeAvailability(String equipmentType) throws DBException{
         Connection con = null;
         try

@@ -13,10 +13,10 @@ import java.util.Scanner;
 public class DemoClass {
     public static void main (String [] args) throws DBException 
     {
-        DemoEvent test = new DemoEvent("6358");
+        DemoEvent test = new DemoEvent(6358);
         test.kijkOfBeschikbaar(true);
         test.kijkOfBeschikbaar(false);
-        DemoEvent test2 = new DemoEvent("8932");
+        DemoEvent test2 = new DemoEvent(8932);
         test2.kijkOfBeschikbaar(true);
         
         Event.printEventLog();

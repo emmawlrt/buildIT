@@ -13,20 +13,20 @@ import java.util.Date;
  * @author Eliz
  */
 public class DemoEvent {
-    private String id ;
+    private int id ;
 
-    public DemoEvent(String ID) {
+    public DemoEvent(int ID) {
         this.id = ID;
     }
      public DemoEvent() {
-        this.id = "testID";
+        this.id = 1;
     }
 
-    public String getID() {
+    public int getID() {
         return id;
     }
 
-    public void setID(String ID) {
+    public void setID(int ID) {
         this.id = ID;
     }
     
@@ -38,15 +38,15 @@ public class DemoEvent {
     if (beschikbaar){
         //creeer Event
     Event e1 = new Event("kijkOfBeschikbaar", 0, this.getID(), "Het item is gevonden");
-        Event.addEventToLog(e1);
-        Event.saveEvent(e1);
+        e1.addEventToLog();
+        e1.saveEvent();
     
     }
     else{
         //creeren Event
     Event e1 = new Event("kijkOfBeschikbaar", 0, this.getID(), "Het item is NIET gevonden");
-   Event.addEventToLog(e1);
-   Event.saveEvent(e1);
+    e1.addEventToLog();
+    e1.saveEvent();
     }
     }
 }
